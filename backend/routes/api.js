@@ -9,7 +9,7 @@ const cardsRouter = require('./cards.js');
 const oauthRouter = require('./oauth/oauth');
 // Ai generation router
 const aiGeneration = require('./generation/generation');
-
+//google oath router
 // auth route
 router.use('/auth', authRouter);
 
@@ -19,7 +19,10 @@ router.use('/cards', cardsRouter);
 //createRoute
 router.use('/generate', aiGeneration);
 
-// oauth
+// GitHub oauth
 router.use('/oauth', oauthRouter);
+
+//Google Oauth
+//router.use('/google/oauth', googleOath);
 
 module.exports = router;
