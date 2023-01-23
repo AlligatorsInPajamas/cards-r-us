@@ -4,7 +4,6 @@ import { Request, Response, Router } from 'express';
 
 //import passport
 const passport = require('passport');
-import passport from 'passport';
 
 //attach routes to router
 const router = express.Router();
@@ -13,10 +12,15 @@ const router = express.Router();
 //auth with google
 //activate google strategy to authenticate a user and will redirect to google conscent screen
 
-router.get(
-  '/login',
-  passport.authenticate('google', { scope: ['email', 'profile'] })
-);
+// router.get(
+//   '/login',
+//   // passport.authenticate('google', { scope: ['email', 'profile'] })
+//   res.send('YAY')
+// );
+
+router.get('/login', (req: Request, res: Response) => {
+  res.send('Youre in');
+});
 
 //callback route for google to redirect to
 //authenticating again because this time we have a code in the url
