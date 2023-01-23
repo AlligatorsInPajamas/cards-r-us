@@ -2,14 +2,16 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+//require in specific keys
 require('dotenv').config();
 const { DB_URI } = process.env;
+import express, { NextFunction, Request, Response } from 'express';
 
 const PORT = 3000;
 const app = express();
 
 // api router
-const apiRouter = require('./routes/api.js');
+const apiRouter = require('./routes/api');
 
 app.use(cookieParser());
 app.use(express.json());
@@ -17,6 +19,7 @@ app.use('/', express.static(path.resolve('./dist')));
 
 mongoose.set('strictQuery', false);
 
+//connect to mongoose
 mongoose
   .connect(DB_URI)
   .then(() => {
@@ -26,7 +29,7 @@ mongoose
   .catch(console.error);
 
 // Main page
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   res.status(200).sendFile(path.resolve('./dist/index.html'));
 });
 
@@ -49,4 +52,3 @@ app.use((err, req, res, next) => {
   console.log(errorObj.log);
   return res.status(errorObj.status).json(errorObj.message);
 });
-

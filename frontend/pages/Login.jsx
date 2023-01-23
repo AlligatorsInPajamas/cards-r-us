@@ -8,12 +8,11 @@ import useLoginState from '../hooks/useLoginHooke';
 const Login = () => {
   const { updateLogin } = useLoginState();
 
-
   const handleLogin = (e) => {
     e.preventDefault();
     const email = e.target.querySelector('#email').value;
     const password = e.target.querySelector('#password').value;
-    const info = { email, password};
+    const info = { email, password };
 
     fetch('/api/auth/login', {
       method: 'POST',
@@ -22,13 +21,11 @@ const Login = () => {
       },
       body: JSON.stringify(info),
     })
-    .then((res) => res.json())
-    .then((data) => {
-      updateLogin(data);
-    });
+      .then((res) => res.json())
+      .then((data) => {
+        updateLogin(data);
+      });
   };
-
-
 
   return (
     <div className='LoginPage'>
@@ -44,7 +41,7 @@ const Login = () => {
       <Form onSubmit={handleLogin}>
         <div className='Inputs noSelect'>
           <label>Email:</label>
-          <input type='email' name='email' id='email'/>
+          <input type='email' name='email' id='email' />
           <br />
           <label>Password:</label>
           <input type='password' name='password' id='password' />
@@ -63,7 +60,9 @@ const Login = () => {
           Forget password?
         </Link>
         <div className='Icons'>
-          <a className='icon' href='#'>
+          <a
+            className='icon'
+            href='http://localhost:8080/api/google/oauth/login'>
             <i className='fa-brands fa-google'></i>
           </a>
           <a className='icon' href='http://localhost:8080/api/oauth/gh'>

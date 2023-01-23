@@ -1,15 +1,26 @@
 const express = require('express');
 const router = express.Router();
+import dotenv from 'dotenv';
 
 // LoginRouter
 const authRouter = require('./auth.js');
 //cardsRouter
 const cardsRouter = require('./cards.js');
-// oauth router
+// github oauth router
 const oauthRouter = require('./oauth/oauth');
+//google oauth router
+const googleOath = require('./googleOauth/googleOauth');
+
 // Ai generation router
 const aiGeneration = require('./generation/generation');
-//google oath router
+
+//require in the googleOath route to get passport to run
+const passportSetUp = require('../controllers/googleOauth/googleC');
+
+import '../controllers/googleOauth/googleC';
+
+dotenv.config();
+
 // auth route
 router.use('/auth', authRouter);
 
@@ -23,6 +34,6 @@ router.use('/generate', aiGeneration);
 router.use('/oauth', oauthRouter);
 
 //Google Oauth
-//router.use('/google/oauth', googleOath);
+router.use('/google/oauth', googleOath);
 
 module.exports = router;
