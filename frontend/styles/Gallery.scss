@@ -66,11 +66,15 @@
         display: flex;
         width: 100%;
 
-        ul,
-        li {
-          margin: 5px auto;
-          padding: 0px;
-          list-style: none;
+        ul {
+          display: flex;
+
+          flex-direction: column;
+          li {
+            margin: 5px auto;
+            padding: 0px;
+            list-style: none;
+          }
         }
       }
 
