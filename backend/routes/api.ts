@@ -9,13 +9,13 @@ const cardsRouter = require('./cards.js');
 // github oauth router
 const oauthRouter = require('./oauth/oauth');
 //google oauth router
-const googleOath = require('./googleOauth/googleOauth');
 
+const googleOauth = require('./googleOauth/googleOauth');
 // Ai generation router
 const aiGeneration = require('./generation/generation');
 
 //require in the googleOath route to get passport to run
-const passportSetUp = require('../controllers/googleOauth/googleC');
+// const passportSetUp = require('../controllers/googleOauth/googleC');
 
 import '../controllers/googleOauth/googleC';
 
@@ -34,6 +34,6 @@ router.use('/generate', aiGeneration);
 router.use('/oauth', oauthRouter);
 
 //Google Oauth
-router.use('/google/oauth', googleOath);
+router.use('/google/', googleOauth);
 
 module.exports = router;

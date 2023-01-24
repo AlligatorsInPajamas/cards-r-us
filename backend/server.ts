@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const { DB_URI } = process.env;
 import express, { NextFunction, Request, Response } from 'express';
+import passport from 'passport';
 
 const PORT = 3000;
 const app = express();
@@ -16,6 +17,9 @@ const apiRouter = require('./routes/api');
 app.use(cookieParser());
 app.use(express.json());
 app.use('/', express.static(path.resolve('./dist')));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 mongoose.set('strictQuery', false);
 
@@ -35,6 +39,11 @@ app.get('/', (req: Request, res: Response) => {
 
 // All api routes
 app.use('/api', apiRouter);
+
+// app.get('/auth/google/callback', (req: Request, res: Response) => {
+//   console.log('in');
+//   res.render('you got in');
+// });
 
 // 404 redirect to index.html for react router
 app.use((req, res) =>
