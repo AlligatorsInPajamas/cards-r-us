@@ -73,7 +73,7 @@ const CreateImg = ({
       },
       body: JSON.stringify(prompt),
     })
-      .then((res) => res.json)
+      .then((res) => res.json())
       .then((data: any) => {
         setImgList(data.data);
         setSearching(false);
@@ -206,7 +206,7 @@ const CreatePrompt = ({
         <div
           className='Preview'
           style={{
-            backgroundImage: `url(${image ?? Placeholder})`,
+            backgroundImage: `url(${image?.url ?? Placeholder})`,
             borderRadius: '1em',
           }}>
           <h2
@@ -261,7 +261,7 @@ const CreateCard = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          imageUrl: selectedImage,
+          imageUrl: selectedImage?.url,
           message: selectedMessage?.message ?? 'placeholder',
           messageColor: selectedMessage?.color ?? 'placeholder',
         }),
