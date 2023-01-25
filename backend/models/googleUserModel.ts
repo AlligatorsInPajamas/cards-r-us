@@ -14,6 +14,11 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  gallery: {
+    type: Array(String),
+    require: false,
+    default: [],
+  },
 });
 
 // export default CurrentUser;

@@ -7,6 +7,11 @@ const sessionController = require('../controllers/sessionController.js');
 //   console.log('cards router connected');
 // });
 
+const {
+  ensureAuth,
+  ensureGuest,
+} = require('../controllers/googleOauth/gAuthC');
+
 //GET REQUEST
 router.get(
   '/',
@@ -18,6 +23,12 @@ router.get(
     return res.status(200).json(res.locals.cards);
   }
 );
+
+router.get('/', cardsController.getCards, ensureAuth, (req, res) => {
+  //respond to client with cards collection data retrieved from DB
+  console.log('GET REQUEST for cardsController.getCards');
+  return res.status(200).json(res.locals.cards);
+});
 
 router.get('/card/:cardId', cardsController.getCard, (req, res) => {
   res.status(200).json(res.locals.card);

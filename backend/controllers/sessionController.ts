@@ -1,5 +1,7 @@
 const Session = require('../models/sessionsModel.js');
 const User = require('../models/UserModel.js');
+//const GoogleUsers = require('../models/googleUserModel');
+import { NextFunction, Request, Response } from 'express';
 
 const sessionController = {};
 
@@ -7,8 +9,14 @@ const sessionController = {};
  * isLoggedIn - find the appropriate session for this request in the database, then
  * verify whether or not the session is still valid.
  */
-sessionController.isLoggedIn = (req, res, next) => {
+sessionController.isLoggedIn = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log('req.cookies', req.cookies);
   const { SSID } = req.cookies;
+  console.log('SSID', SSID);
   if (!SSID) {
     return next({
       log: `sessionController.isLoggedIn: No session found.`,
@@ -18,6 +26,8 @@ sessionController.isLoggedIn = (req, res, next) => {
   }
 
   Session.findOne({ _id: SSID }, async (err, records) => {
+    console.log('made it to findOne');
+    console.log('records', records);
     if (err)
       return next({
         log: `sessionController.isLoggedIn: ${err}`,
@@ -33,14 +43,17 @@ sessionController.isLoggedIn = (req, res, next) => {
       });
 
     User.findOne({ _id: records.userId }, (err, user) => {
+      console.log('user find one');
       if (err)
         return next({
           log: `sessionController.isLoggedIn: ${err}`,
           status: 500,
           message: { err: 'An error occurred' },
         });
-
+      console.log('after if');
+      console.log('user', user);
       res.locals.user = user;
+      console.log('res', res.locals.user);
       return next();
     });
   });
@@ -51,7 +64,7 @@ sessionController.isLoggedIn = (req, res, next) => {
  */
 sessionController.startSession = (req, res, next) => {
   const { SSID } = req.cookies;
-
+  console.log('SSID', SSID);
   // If there is already an SSID cookie, go ahead an authenticate it.
   // if (SSID) return sessionController.isLoggedIn(req, res, next);
 

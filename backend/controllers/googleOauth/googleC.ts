@@ -4,31 +4,11 @@ require('dotenv').config();
 //require in passport
 const mongoose = require('mongoose');
 //import googleuser model
-const GoogleUser = require('../../models/googleUserModel');
+const GoogleUsers = require('../../models/googleUserModel');
 //require in googlestrategy
 
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-// passport.use(
-//   new oauth(
-//     {
-//       clientID: process.env.GOOGLE_CLIENT_ID || '',
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-//       callbackURL: 'http://localhost:8080/api/google/callback',
-//       passReqToCallback: true,
-//     },
-//     async function (
-//       request: any,
-//       accessToken: any,
-//       refreshToken: any,
-//       profile: any,
-//       done: any
-//     ) {
-//       console.log('profile', profile);
-//       done(null, profile);
-//     }
-//   )
-// );
 module.exports = function (passport) {
   passport.use(
     new GoogleStrategy(
@@ -45,17 +25,19 @@ module.exports = function (passport) {
         profile: any,
         done: any
       ) => {
+        console.log('profile', profile);
         const newUser = {
           googleId: profile.id,
           displayName: profile.displayName,
           firstName: profile.name.givenName,
+          gallery: [],
         };
         try {
-          let gUser = await GoogleUser.findOne({ googleId: profile.id });
+          let gUser = await GoogleUsers.findOne({ googleId: profile.id });
           if (gUser) {
             done(null, gUser);
           } else {
-            gUser = await GoogleUser.create(newUser);
+            gUser = await GoogleUsers.create(newUser);
             done(null, gUser);
           }
         } catch (err) {
@@ -64,27 +46,6 @@ module.exports = function (passport) {
       }
     )
   );
-
-  // passport.use(
-  //   new GoogleStrategy(
-  //     {
-  //       clientID: process.env.GOOGLE_CLIENT_ID || '',
-  //       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-  //       callbackURL: 'http://localhost:8080/api/google/callback',
-  //       passReqToCallback: true,
-  //     },
-  //     async function (
-  //       accessToken: any,
-  //       refreshToken: any,
-  //       profile: any,
-  //       done: any
-  //     )
-
-  //       console.log('user profile is: ', profile);
-  //     }
-
-  //   )
-  // );
 
   // // used to serialize the user for the session
   passport.serializeUser(function (user: any, done: any) {
