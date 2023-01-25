@@ -51,7 +51,7 @@ const CreateImg = ({
 }: StepDisplayProps) => {
   const [selectedImage, setSelectedImage] = imageState;
   const [userPrompt, setUserPrompt] = useState('');
-  // allImages is the state variable. In this case, setImgList will just be the second element of the allImages array through array destructuring, no?
+  // allImages is the state variable. In this case, setImgList will just be the second element of the allImagesState array through array destructuring
   const [imgList, setImgList] = allImagesState;
 
   const [searching, setSearching] = useState(false);
@@ -73,12 +73,7 @@ const CreateImg = ({
       },
       body: JSON.stringify(prompt),
     })
-      .then((res) => {
-        console.log({ res });
-        const tmpJSON = res.json;
-        console.log(tmpJSON);
-        return tmpJSON;
-      })
+      .then((res) => res.json)
       .then((data: any) => {
         setImgList(data.data);
         setSearching(false);
