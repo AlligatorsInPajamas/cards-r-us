@@ -32,7 +32,6 @@ router.get(
   oauth.middleware.getUser,
   sessionController.startSession,
   (req, res, next) => {
-    console.log('COOKIES', req.cookies);
     res.status(304).redirect('/cards');
   }
 );
