@@ -6,10 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "type": "tsc --watch --preserveWatchOutput",
-    "server": "nodemon ./dist/server.js",
+    "type": "tsc --watch --preserveWatchOutput & webpack serve",
+    "server": "npx nodemon ./backend/server.js",
     "web": "webpack serve",
-    "start": "concurrently \"npm run build:dev\" \"npm run start:dev\""
+    "start": "concurrently \"npm run type\" \"npm run server\""
   },
   "repository": {
     "type": "git",
@@ -51,6 +51,7 @@
     "@babel/core": "^7.20.12",
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
+    "@svgr/webpack": "^6.5.1",
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.15",
     "@types/express-session": "^1.17.5",
@@ -60,7 +61,6 @@
     "@types/passport-google-oauth2": "^0.1.5",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.10",
-    "@svgr/webpack": "^6.5.1",
     "babel-loader": "^9.1.2",
     "concurrently": "^7.6.0",
     "css-loader": "^6.7.3",

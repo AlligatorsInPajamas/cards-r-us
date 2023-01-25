@@ -28,7 +28,7 @@ import Placeholder from '../images/testImg/img0.jpg';
 import logo from '../images/logo.png';
 import BG from '../images/BG2.svg';
 
-import useLoginState from '../hooks/useLoginHooke';
+import useLoginState from '../hooks/useLoginHook';
 
 let filterCardsByAuthor = false;
 // This will be used to hold the un-filtered cards
