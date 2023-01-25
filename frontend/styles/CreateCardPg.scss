@@ -78,13 +78,13 @@
     }
   }
   .imgDisplay {
-    z-index: 0;
+    z-index: 1;
     display: flex;
     justify-content: center;
     .img-result {
       display: inline-grid;
       grid-template-columns: auto auto;
-      height: 100%;
+      height: 35vw;
       width: 35vw;
       min-width: 400px;
       min-height: 400px;
@@ -98,7 +98,7 @@
         justify-content: center;
         align-items: center;
         img {
-          // padding-left: 3em;
+          padding-left: 3em;
           width: 100%;
           animation: fadeIn 2s linear, load 2s infinite alternate;
         }
@@ -226,7 +226,7 @@
     height: 100vh;
     padding: 0 2em;
     .image {
-      width: 100%;
+      width: 10vw;
       img {
         width: inherit;
         border-radius: 1em;
