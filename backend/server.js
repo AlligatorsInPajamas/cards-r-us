@@ -41,7 +41,7 @@ app.use((req, res) =>
 // Express error handler
 app.use((err, req, res, next) => {
   const defaultErr = {
-    log: 'Express error handler caught unknown middleware error',
+    log: `Express global error handler caught unhandled middleware error: ${err}`,
     status: 500,
     message: { err: 'An error occurred' },
   };
@@ -49,4 +49,3 @@ app.use((err, req, res, next) => {
   console.log(errorObj.log);
   return res.status(errorObj.status).json(errorObj.message);
 });
-
