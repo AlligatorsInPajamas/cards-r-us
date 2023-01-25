@@ -17,7 +17,6 @@ router.use((_, res, next) => {
 // Authorize
 router.get('/', (_, res) => {
   const { clientId, host } = res.locals.GH;
-  console.log('gitHub');
   res
     .status(304)
     .redirect(

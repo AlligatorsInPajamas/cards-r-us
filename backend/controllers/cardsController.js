@@ -1,11 +1,9 @@
 const User = require('../models/UserModel');
-
 const Card = require('../models/CardModel');
 
 const cardsController = {
   async getCards(req, res, next) {
     try {
-      console.log('cards user', res.locals.user);
       const { _id, gallery } = res.locals.user;
 
       res.locals.cards = await Promise.all(
