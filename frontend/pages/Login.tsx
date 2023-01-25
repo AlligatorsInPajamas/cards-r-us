@@ -1,19 +1,28 @@
-import React from 'react';
+import React, { FormEvent, useRef } from 'react';
 import { Form, Link } from 'react-router-dom';
 
 import Logo from '../images/logo.png';
 import Background from '../images/bg.svg';
-import useLoginState from '../hooks/useLoginHooke';
+import useLoginState from '../hooks/useLoginHook';
 
-const Login = () => {
+function Login() {
   const { updateLogin } = useLoginState();
 
-
-  const handleLogin = (e) => {
+  const handleLogin = (e: React.SyntheticEvent): void => {
     e.preventDefault();
-    const email = e.target.querySelector('#email').value;
-    const password = e.target.querySelector('#password').value;
-    const info = { email, password};
+    const target = e.target as typeof e.target & {
+      email: { value: string };
+      password: { value: string };
+    };
+
+    const email = target.email.value;
+    const password = target.password.value;
+
+    // const email = (e.target.querySelector('#email') as HTMLInputElement).value;
+    // const password = (e.target.querySelector('#password') as HTMLInputElement)
+    //   .value;
+    console.log('email', email, 'password', password);
+    const info = { email, password };
 
     fetch('/api/auth/login', {
       method: 'POST',
@@ -22,13 +31,11 @@ const Login = () => {
       },
       body: JSON.stringify(info),
     })
-    .then((res) => res.json())
-    .then((data) => {
-      updateLogin(data);
-    });
+      .then((res) => res.json())
+      .then((data) => {
+        updateLogin(data);
+      });
   };
-
-
 
   return (
     <div className='LoginPage'>
@@ -44,7 +51,7 @@ const Login = () => {
       <Form onSubmit={handleLogin}>
         <div className='Inputs noSelect'>
           <label>Email:</label>
-          <input type='email' name='email' id='email'/>
+          <input type='email' name='email' id='email' />
           <br />
           <label>Password:</label>
           <input type='password' name='password' id='password' />
@@ -76,6 +83,6 @@ const Login = () => {
       </Form>
     </div>
   );
-};
+}
 
 export default Login;

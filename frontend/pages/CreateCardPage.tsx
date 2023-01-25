@@ -11,7 +11,7 @@ import loading from '../images/loading.gif';
 
 //import bg svg
 import BG from '../images/bg.svg';
-import useLoginState from '../hooks/useLoginHooke';
+import useLoginState from '../hooks/useLoginHook';
 
 // Declare Interfaces Here
 // Will need one for imgList
