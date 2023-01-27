@@ -30,6 +30,7 @@ export default function useLoginState() {
       userId: null,
     };
 
+    console.log('fetchedData', fetchedData);
     setLoginInformation({
       isLoggedIn: fetchedData?.userId !== null,
       user: { ...defaultUser, fetchedData, userId: fetchedData.id },

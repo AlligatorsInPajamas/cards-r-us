@@ -4,11 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
+    "test": "jest",
     "type": "tsc --watch --preserveWatchOutput & webpack serve",
     "server": "npx nodemon ./backend/server.js",
-    "web": "webpack serve",
     "start": "concurrently \"npm run type\" \"npm run server\""
   },
   "repository": {
@@ -29,6 +27,7 @@
     "@mui/icons-material": "^5.11.0",
     "@mui/joy": "^5.0.0-alpha.61",
     "@mui/material": "^5.11.3",
+    "@types/jest": "^29.4.0",
     "aws-sdk": "^2.1289.0",
     "axios": "^1.2.2",
     "bcrypt": "^5.1.0",
@@ -52,6 +51,7 @@
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
     "@svgr/webpack": "^6.5.1",
+    "@testing-library/jest-dom": "^5.16.5",
     "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.15",
     "@types/express-session": "^1.17.5",
@@ -66,11 +66,14 @@
     "css-loader": "^6.7.3",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
+    "jest-environment-jsdom": "^29.4.0",
     "nodemon": "^2.0.20",
     "sass": "^1.57.1",
     "sass-loader": "^13.2.0",
     "style-loader": "^3.3.1",
+    "ts-jest": "^29.0.5",
     "ts-loader": "^9.4.2",
+    "ts-node": "^10.9.1",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1"
