@@ -79,7 +79,7 @@ app.use((req: Request, res: Response) =>
 );
 
 // Express error handler
-app.use((err, req, res, next) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   const defaultErr = {
     log: `Express global error handler caught unhandled middleware error: ${err}`,
     status: 500,

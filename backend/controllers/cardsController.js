@@ -1,19 +1,11 @@
 const User = require('../models/UserModel');
 const Card = require('../models/CardModel');
-import session from 'express-session';
+const GoogleUsers = require('../models/googleUserModel');
 
 const cardsController = {
   async getCards(req, res, next) {
-    console.log('get cards');
     try {
-      console.log('get cards');
-      console.log('res.locals', res.locals);
-
-      //git hub
       const { _id, gallery } = res.locals.user;
-      console.log('res.locals2', res.locals);
-
-      console.log('cards res locals user', res.locals.user);
 
       res.locals.cards = await Promise.all(
         gallery.map(async (cardId) => {
@@ -78,29 +70,59 @@ const cardsController = {
   async createCard(req, res, next) {
     const { imageUrl, message, messageColor } = req.body;
     console.log(req.body);
-
-    try {
-      if ((!imageUrl || !message, !messageColor))
-        return new Error('No image url or message provided');
-      const newCard = await Card.create({
-        author: res.locals.user.id,
-        image: imageUrl,
-        message,
-        messageColor,
-      });
-      const { _id } = newCard;
-      res.locals.user.gallery.push(_id);
-      await User.findOneAndUpdate(
-        { _id: res.locals.user._id },
-        { gallery: res.locals.user.gallery }
-      );
-      return next();
-    } catch (e) {
-      return next({
-        log: 'Error creating card in cardController',
-        status: 409,
-        message: { err: e.message },
-      });
+    let Guser = req.session.passport.user;
+    const { SSID } = req.cookies;
+    //if google
+    if (!req.cookies.SSID) {
+      try {
+        if ((!imageUrl || !message, !messageColor))
+          return new Error('No image url or message provided');
+        const newCard = await Card.create({
+          author: res.locals.user.id,
+          image: imageUrl,
+          message,
+          messageColor,
+        });
+        const { _id } = newCard;
+        let Guser = res.locals.user.gallery.push(_id);
+        await GoogleUsers.findOneAndUpdate(
+          { _id: Guser },
+          { gallery: res.locals.Guser.gallery }
+        );
+        return next();
+      } catch (e) {
+        return next({
+          log: 'Error creating card in cardController',
+          status: 409,
+          message: { err: e.message },
+        });
+      }
+    }
+    //if github
+    if (!req.session.passport.user) {
+      try {
+        if ((!imageUrl || !message, !messageColor))
+          return new Error('No image url or message provided');
+        const newCard = await Card.create({
+          author: res.locals.user.id,
+          image: imageUrl,
+          message,
+          messageColor,
+        });
+        const { _id } = newCard;
+        res.locals.user.gallery.push(_id);
+        await User.findOneAndUpdate(
+          { _id: res.locals.user._id },
+          { gallery: res.locals.user.gallery }
+        );
+        return next();
+      } catch (e) {
+        return next({
+          log: 'Error creating card in cardController',
+          status: 409,
+          message: { err: e.message },
+        });
+      }
     }
   },
 

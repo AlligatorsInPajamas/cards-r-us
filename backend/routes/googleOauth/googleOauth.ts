@@ -48,7 +48,9 @@ router.get('/failure', (req: Request, res: Response) => {
 router.get('/logout', (req: Request, res: Response) => {
   //handle with passport
   //logout
-  req.logout();
+  req.logout((err: any) => {
+    return res.status(500).send(err);
+  });
   res.redirect('/');
 });
 

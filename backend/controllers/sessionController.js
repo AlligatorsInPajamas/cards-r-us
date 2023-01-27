@@ -11,11 +11,7 @@ const sessionController = {};
  * isLoggedIn - find the appropriate session for this request in the database, then
  * verify whether or not the session is still valid.
  */
-sessionController.isLoggedIn = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+sessionController.isLoggedIn = (req, res, next) => {
   console.log('req.cookiessss', req.cookies);
 
   console.log('yay');
@@ -67,45 +63,7 @@ sessionController.isLoggedIn = (
       });
     });
   }
-  //github
-  // if (!SSID) {
-  //   console.log('google search');
-  //   const s = 'req.session';
-  //   console.log('s', s);
-  //   console.log('Session', express.session);
-  //   Session.findOne({ s: token }, async (err, records) => {
-  //     console.log('made it to findOne for Google');
-  //     console.log('records', records);
-  //     if (err)
-  //       return next({
-  //         log: `sessionController.isLoggedIn: ${err}`,
-  //         status: 500,
-  //         message: { err: 'An error occurred' },
-  //       });
 
-  //     if (records === null || records?.userId === null)
-  //       return next({
-  //         log: `sessionController.isLoggedIn: Records is null`,
-  //         status: 401,
-  //         message: { err: 'No session found.' },
-  //       });
-
-  //     User.findOne({ _id: records.userId }, (err, user) => {
-  //       console.log('user find one');
-  //       if (err)
-  //         return next({
-  //           log: `sessionController.isLoggedIn: ${err}`,
-  //           status: 500,
-  //           message: { err: 'An error occurred' },
-  //         });
-  //       console.log('after if');
-  //       console.log('user', user);
-  //       res.locals.user = user;
-  //       console.log('res', res.locals.user);
-  //       return next();
-  //     });
-  //   });
-  // }
   if (!SSID) {
     let user = req.session.passport.user;
     GoogleUsers.findOne({ _id: user }, (err, user) => {
