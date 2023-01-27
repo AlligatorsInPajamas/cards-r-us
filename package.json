@@ -6,9 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "type": "tsc --watch --preserveWatchOutput",
     "server": "nodemon ./dist/server.js",
     "web": "webpack serve",
+    "type": "tsc --watch --preserveWatchOutput",
     "start": "concurrently \"npm run server\" \"npm run web\""
   },
   "repository": {
@@ -75,6 +75,7 @@
     "nodemon": "^2.0.20",
     "sass": "^1.57.1",
     "sass-loader": "^13.2.0",
+    "source-map-loader": "^4.0.1",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.4.2",
     "webpack": "^5.75.0",
