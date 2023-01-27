@@ -1,5 +1,5 @@
 const User = require('../models/UserModel');
-const Card = require('../models/cardModel');
+const Card = require('../models/CardModel');
 import session from 'express-session';
 
 const cardsController = {
