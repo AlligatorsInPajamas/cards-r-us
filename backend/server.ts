@@ -11,7 +11,6 @@ const session = require('express-session');
 import passport from 'passport';
 const MongoStore = require('connect-mongo')(session);
 const cookieSession = require('cookie-session');
-const Gcards = require('./routes/Gcards');
 
 const PORT = 3000;
 

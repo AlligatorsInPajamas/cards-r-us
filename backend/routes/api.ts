@@ -8,7 +8,6 @@ import { NextFunction, Request, Response } from 'express';
 const authRouter = require('./auth.js');
 //cardsRouter
 const cardsRouter = require('./cards');
-const GcardsRouter = require('./Gcards');
 // github oauth router
 const oauthRouter = require('./oauth/oauth');
 //google oauth router
