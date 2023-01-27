@@ -48,11 +48,16 @@ module.exports = function (passport) {
   );
 
   // // used to serialize the user for the session
+  //determines which data of the user object should be stored in the session
+  //req.session.passport.user = {id: '..'}
   passport.serializeUser(function (user: any, done: any) {
-    done(null, user);
+    done(null, user.id);
   });
 
   // used to deserialize the user
+  //The user id (you provide as the second argument of the done function)
+  //is saved in the session and is later used to retrieve the whole object
+  // via the deserializeUser function.
   passport.deserializeUser(function (user: any, done: any) {
     done(null, user);
   });

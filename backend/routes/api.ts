@@ -8,6 +8,7 @@ import { NextFunction, Request, Response } from 'express';
 const authRouter = require('./auth.js');
 //cardsRouter
 const cardsRouter = require('./cards');
+const GcardsRouter = require('./Gcards');
 // github oauth router
 const oauthRouter = require('./oauth/oauth');
 //google oauth router
@@ -32,16 +33,7 @@ const {
   ensureGuest,
 } = require('../controllers/googleOauth/gAuthC');
 
-// router.set('trust proxy', 1); // trust first proxy
-// router.use(
-//   session({
-//     secret: 'keyboard cat',
-//     //dont want to save session if nothing is changed
-//     resave: false,
-//     saveUninitialized: false,
-//   })
-// );
-// //set passport middleware
+// // //set passport middleware
 // router.use(passport.initialize());
 // router.use(passport.session());
 
@@ -49,13 +41,8 @@ const {
 router.use('/auth', authRouter);
 
 //cardsRoute
-//router.use('/cards', cardsRouter);
+router.use('/cards', cardsRouter);
 
-router.get('/cards', (req: Request, res: Response) => {
-  res.render('cards', {
-    name: req.user.firstName,
-  });
-});
 //createRoute
 router.use('/generate', aiGeneration);
 

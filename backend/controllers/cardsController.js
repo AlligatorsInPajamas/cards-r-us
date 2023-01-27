@@ -1,10 +1,19 @@
 const User = require('../models/UserModel');
-const Card = require('../models/CardModel');
+const Card = require('../models/cardModel');
+import session from 'express-session';
 
 const cardsController = {
   async getCards(req, res, next) {
+    console.log('get cards');
     try {
+      console.log('get cards');
+      console.log('res.locals', res.locals);
+
+      //git hub
       const { _id, gallery } = res.locals.user;
+      console.log('res.locals2', res.locals);
+
+      console.log('cards res locals user', res.locals.user);
 
       res.locals.cards = await Promise.all(
         gallery.map(async (cardId) => {

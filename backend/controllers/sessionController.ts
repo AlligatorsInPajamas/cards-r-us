@@ -1,7 +1,9 @@
-const Session = require('../models/sessionsModel.js');
+const GitSession = require('../models/sessionsModel.js');
 const User = require('../models/UserModel.js');
-//const GoogleUsers = require('../models/googleUserModel');
+const GoogleUsers = require('../models/googleUserModel');
 import { NextFunction, Request, Response } from 'express';
+import session from 'express-session';
+const Session = require('../models/sessionsModel');
 
 const sessionController = {};
 
@@ -14,35 +16,99 @@ sessionController.isLoggedIn = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log('req.cookies', req.cookies);
+  console.log('req.cookiessss', req.cookies);
+
+  console.log('yay');
+  //for github
   const { SSID } = req.cookies;
+  //for google
+  const token = req.session.id;
+  console.log('token', token);
   console.log('SSID', SSID);
-  if (!SSID) {
+  if (!SSID && !token) {
     return next({
       log: `sessionController.isLoggedIn: No session found.`,
       status: 401,
       message: { err: 'No SSID session found.' },
     });
   }
+  //github
+  if (!token) {
+    GitSession.findOne({ _id: SSID }, async (err, records) => {
+      console.log('made it to findOne');
+      console.log('records', records);
+      if (err)
+        return next({
+          log: `sessionController.isLoggedIn: ${err}`,
+          status: 500,
+          message: { err: 'An error occurred' },
+        });
 
-  Session.findOne({ _id: SSID }, async (err, records) => {
-    console.log('made it to findOne');
-    console.log('records', records);
-    if (err)
-      return next({
-        log: `sessionController.isLoggedIn: ${err}`,
-        status: 500,
-        message: { err: 'An error occurred' },
+      if (records === null || records?.userId === null)
+        return next({
+          log: `sessionController.isLoggedIn: Records is null`,
+          status: 401,
+          message: { err: 'No session found.' },
+        });
+
+      User.findOne({ _id: records.userId }, (err, user) => {
+        console.log('user find one');
+        if (err)
+          return next({
+            log: `sessionController.isLoggedIn: ${err}`,
+            status: 500,
+            message: { err: 'An error occurred' },
+          });
+        console.log('after if');
+        console.log('user', user);
+        res.locals.user = user;
+        console.log('res', res.locals.user);
+        return next();
       });
+    });
+  }
+  //github
+  // if (!SSID) {
+  //   console.log('google search');
+  //   const s = 'req.session';
+  //   console.log('s', s);
+  //   console.log('Session', express.session);
+  //   Session.findOne({ s: token }, async (err, records) => {
+  //     console.log('made it to findOne for Google');
+  //     console.log('records', records);
+  //     if (err)
+  //       return next({
+  //         log: `sessionController.isLoggedIn: ${err}`,
+  //         status: 500,
+  //         message: { err: 'An error occurred' },
+  //       });
 
-    if (records === null || records?.userId === null)
-      return next({
-        log: `sessionController.isLoggedIn: Records is null`,
-        status: 401,
-        message: { err: 'No session found.' },
-      });
+  //     if (records === null || records?.userId === null)
+  //       return next({
+  //         log: `sessionController.isLoggedIn: Records is null`,
+  //         status: 401,
+  //         message: { err: 'No session found.' },
+  //       });
 
-    User.findOne({ _id: records.userId }, (err, user) => {
+  //     User.findOne({ _id: records.userId }, (err, user) => {
+  //       console.log('user find one');
+  //       if (err)
+  //         return next({
+  //           log: `sessionController.isLoggedIn: ${err}`,
+  //           status: 500,
+  //           message: { err: 'An error occurred' },
+  //         });
+  //       console.log('after if');
+  //       console.log('user', user);
+  //       res.locals.user = user;
+  //       console.log('res', res.locals.user);
+  //       return next();
+  //     });
+  //   });
+  // }
+  if (!SSID) {
+    let user = req.session.passport.user;
+    GoogleUsers.findOne({ _id: user }, (err, user) => {
       console.log('user find one');
       if (err)
         return next({
@@ -56,13 +122,14 @@ sessionController.isLoggedIn = (
       console.log('res', res.locals.user);
       return next();
     });
-  });
+  }
 };
 
 /**
  * startSession - create and save a new Session into the database.
  */
 sessionController.startSession = (req, res, next) => {
+  console.log('startSession??');
   const { SSID } = req.cookies;
   console.log('SSID', SSID);
   // If there is already an SSID cookie, go ahead an authenticate it.
