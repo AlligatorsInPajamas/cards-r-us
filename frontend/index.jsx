@@ -14,7 +14,6 @@ import Login from './pages/Login';
 import CreateCard from './pages/CreateCardPage';
 import SignUp from './pages/SignUp';
 import CardViewPage from './pages/CardViewPage';
-import GCardViewPage from './pages/GCardViewPageg';
 
 // Style import
 import './styles/index.scss';
@@ -33,10 +32,6 @@ const routes = [
   {
     path: '/card',
     element: <CardViewPage />,
-  },
-  {
-    path: '/Gcards',
-    element: <GCardViewPage />,
   },
   {
     path: '/login',
