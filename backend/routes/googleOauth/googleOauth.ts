@@ -2,7 +2,6 @@ const express = require('express');
 const session = require('express-session');
 //create instance of router
 import { Request, Response, Router } from 'express';
-const sessionController = require('../../controllers/sessionController');
 
 //import passport
 import passport from 'passport';
@@ -35,14 +34,10 @@ router.get(
     failureRedirect: '/api/google/failure',
   }),
   (req: Request, res: Response) => {
-    //console.log('req.user', req.user);
-    res.status(304).redirect('/cards');
+    console.log('YAYAYAYYAY');
+    res.redirect('/cards');
   }
 );
-
-// router.get('/redirect', sessionController.startSession, (req, res, next) => {
-//   res.status(304).redirect('/cards');
-// });
 
 //works
 router.get('/failure', (req: Request, res: Response) => {
