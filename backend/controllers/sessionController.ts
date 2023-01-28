@@ -48,40 +48,41 @@ sessionController.isLoggedIn = (req, res, next) => {
     });
   }
   //github
-  else {
-    console.log('made it to findOne for git');
-    GitSession.findOne({ _id: SSID }, async (err, records) => {
-      console.log('records', records);
+
+  console.log('made it to findOne for git');
+  GitSession.findOne({ _id: SSID }, async (err, records) => {
+    console.log('Github user find one');
+    console.log('records', records);
+    if (err)
+      return next({
+        log: `sessionController.isLoggedIn: ${err}`,
+        status: 500,
+        message: { err: 'An error occurred' },
+      });
+
+    if (records === null || records?.userId === null)
+      return next({
+        log: `sessionController.isLoggedIn: Records is null`,
+        status: 401,
+        message: { err: 'No session found.' },
+      });
+
+    User.findOne({ _id: records.userId }, (err, user) => {
+      console.log('user find one');
       if (err)
         return next({
           log: `sessionController.isLoggedIn: ${err}`,
           status: 500,
           message: { err: 'An error occurred' },
         });
-
-      if (records === null || records?.userId === null)
-        return next({
-          log: `sessionController.isLoggedIn: Records is null`,
-          status: 401,
-          message: { err: 'No session found.' },
-        });
-
-      User.findOne({ _id: records.userId }, (err, user) => {
-        console.log('user find one');
-        if (err)
-          return next({
-            log: `sessionController.isLoggedIn: ${err}`,
-            status: 500,
-            message: { err: 'An error occurred' },
-          });
-        console.log('after if');
-        console.log('user', user);
-        res.locals.user = user;
-        console.log('res', res.locals.user);
-        return next();
-      });
+      console.log('after if');
+      console.log('user', user);
+      res.locals.user = user;
+      console.log('res', res.locals.user);
+      return next();
     });
-  }
+  });
+
   //google
 };
 
