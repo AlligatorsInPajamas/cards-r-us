@@ -29,7 +29,8 @@ module.exports = function (passport: any) {
         const newUser = {
           googleId: profile.id,
           displayName: profile.displayName,
-          firstName: profile.name.givenName,
+          username: profile.name.givenName,
+          avatar: profile.photos[0].value,
           gallery: [],
         };
         try {

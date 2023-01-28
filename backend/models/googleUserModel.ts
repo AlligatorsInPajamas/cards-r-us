@@ -10,10 +10,16 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  firstName: {
+  username: {
     type: String,
     required: true,
   },
+  avatar: [
+    {
+      type: String,
+      required: false,
+    },
+  ],
   gallery: {
     type: Array(String),
     require: false,

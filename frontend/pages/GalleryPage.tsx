@@ -43,6 +43,7 @@ interface CardData {
 export interface UserData {
   avatar: any;
   username: string;
+  firstName: string;
 }
 
 let filterCardsByAuthor = false;
@@ -72,6 +73,7 @@ const GalleryPage = () => {
           if (d.status !== 200) {
             setError(true);
           }
+          console.log('hit no cards on gallery page');
           return d.json();
         })
         .then((d) => {
@@ -82,6 +84,7 @@ const GalleryPage = () => {
         })
         .catch((e) => {
           setError(true);
+          console.log('Error occured with cards');
           console.log('Error occured: ', e);
         });
     }
@@ -93,6 +96,7 @@ const GalleryPage = () => {
             console.log(`Res status was not 200`);
             setError(true);
           }
+          console.log('hit no user on gallery page');
           return d.json();
         })
         .then((d) => {
@@ -101,6 +105,7 @@ const GalleryPage = () => {
         })
         .catch((e) => {
           setError(true);
+          console.log('hit no user on gallery page');
           console.log('Error occured: ', e);
         });
     }

@@ -75,6 +75,7 @@ const cardsController = {
     //if google
     if (!req.cookies.SSID) {
       try {
+        console.log('google cards');
         if ((!imageUrl || !message, !messageColor))
           return new Error('No image url or message provided');
         const newCard = await Card.create({

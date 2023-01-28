@@ -11,7 +11,11 @@ const sessionController = {};
  * isLoggedIn - find the appropriate session for this request in the database, then
  * verify whether or not the session is still valid.
  */
-sessionController.isLoggedIn = (req, res, next) => {
+sessionController.isLoggedIn = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   console.log('req.cookiessss', req.cookies);
 
   console.log('yay');
@@ -63,7 +67,7 @@ sessionController.isLoggedIn = (req, res, next) => {
       });
     });
   }
-
+  //github
   if (!SSID) {
     let user = req.session.passport.user;
     GoogleUsers.findOne({ _id: user }, (err, user) => {
