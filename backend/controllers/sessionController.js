@@ -48,7 +48,7 @@ sessionController.isLoggedIn = (req, res, next) => {
     });
   }
   //github
-  if (SSID) {
+  else {
     console.log('made it to findOne for git');
     GitSession.findOne({ _id: SSID }, async (err, records) => {
       console.log('records', records);
