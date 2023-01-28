@@ -6,11 +6,20 @@ import Placeholder from '../images/testImg/img0.jpg';
 import BG from '../images/BG2.svg';
 import logo from '../images/logo.png';
 
+interface CardInfo {
+  imageUrl: string;
+  messageColor: string;
+  message: string;
+}
 const CardViewPage = () => {
-  const [cardInfo, setCardInfo] = useState(null);
+  const [cardInfo, setCardInfo] = useState<CardInfo | null>(null);
   const [err, setErr] = useState(false);
+  // const { cardId } = JSON.parse(
+  //   `{"cardId":"${useLocation().search.replaceAll('?', '')}"}`
+  // );
+
   const { cardId } = JSON.parse(
-    `{"cardId":"${useLocation().search.replaceAll('?', '')}"}`
+    `{"cardId":"${useLocation().search.replace(/\?/g, '')}"}`
   );
 
   useEffect(() => {
@@ -35,7 +44,9 @@ const CardViewPage = () => {
 
   return (
     <div className='CardViewPage'>
-      <div className='logoContainer' onClick={() => window.location.href = '/cards'}>
+      <div
+        className='logoContainer'
+        onClick={() => (window.location.href = '/cards')}>
         <img className='logo noDrag' src={logo} alt='CardsRUs' />
       </div>
       <BG className='background' />

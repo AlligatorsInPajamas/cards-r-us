@@ -1,37 +1,37 @@
 import React from 'react';
 import { Form, Link } from 'react-router-dom';
 
-import Logo from '../images/logo.png';
 import Background from '../images/bg.svg';
-import useLoginState from '../hooks/useLoginHooke';
+import Logo from '../images/logo.png';
 
-const Login = () => {
-  const { updateLogin } = useLoginState();
-
-
-  const handleLogin = (e) => {
+const SignUp = () => {
+  const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const email = e.target.querySelector('#email').value;
-    const password = e.target.querySelector('#password').value;
-    const info = { email, password};
+    const target = e.target as typeof e.target & {
+      email: { value: string };
+      password: { value: string };
+    };
 
-    fetch('/api/auth/login', {
+    const email = target.email.value;
+    const password = target.password.value;
+
+    const info = { email, password };
+
+    fetch('/api/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(info),
     })
-    .then((res) => res.json())
-    .then((data) => {
-      updateLogin(data);
-    });
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('Successfully created account');
+      });
   };
 
-
-
   return (
-    <div className='LoginPage'>
+    <div className='SignUpPage'>
       <Link className='logoContainer' to={'/'}>
         <img
           src={Logo}
@@ -41,32 +41,32 @@ const Login = () => {
         />
       </Link>
       <Background className='background' />
-      <Form onSubmit={handleLogin}>
+      <Form action='/' method='post' onSubmit={handleSubmit}>
         <div className='Inputs noSelect'>
           <label>Email:</label>
-          <input type='email' name='email' id='email'/>
+          <input type='email' name='email' id='email' />
           <br />
           <label>Password:</label>
+          <input type='password' name='password' />
+          <br className='noSelect' />
+          <label>Confirm Password:</label>
           <input type='password' name='password' id='password' />
           <br className='noSelect' />
         </div>
 
         <div className='buttons noSelect'>
-          <button className='button'>Sign In</button>
-          <Link className='button' to='/signup'>
-            Sign Up
-          </Link>
+          <button className='button'>
+            <Link className='button' to='/login'>
+              Create Account
+            </Link>
+          </button>
         </div>
         <br className='noSelect' />
-        <Link className='noSelect' to='findPw'>
-          {' '}
-          Forget password?
-        </Link>
         <div className='Icons'>
           <a className='icon' href='#'>
             <i className='fa-brands fa-google'></i>
           </a>
-          <a className='icon' href='http://localhost:8080/api/oauth/gh'>
+          <a className='icon' href='#'>
             <i className='fa-brands fa-github'></i>
           </a>
           <a className='icon' href='#'>
@@ -78,4 +78,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;
