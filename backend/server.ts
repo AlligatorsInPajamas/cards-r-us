@@ -68,11 +68,6 @@ app.get('/', (req: Request, res: Response) => {
 // All api routes
 app.use('/api', apiRouter);
 
-// app.get('/auth/google/callback', (req: Request, res: Response) => {
-//   console.log('in');
-//   res.render('you got in');
-// });
-
 // 404 redirect to index.html for react router
 app.use((req: Request, res: Response) =>
   res.status(200).sendFile(path.resolve('./dist/index.html'))
