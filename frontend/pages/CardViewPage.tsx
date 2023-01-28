@@ -19,7 +19,7 @@ const CardViewPage = () => {
   // );
 
   const { cardId } = JSON.parse(
-    `{"cardId":"${useLocation().search.replace(/:/g, '')}"}`
+    `{"cardId":"${useLocation().search.replace(/\?/g, '')}"}`
   );
 
   useEffect(() => {
