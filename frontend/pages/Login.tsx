@@ -8,7 +8,7 @@ import useLoginState from '../hooks/useLoginHook';
 function Login() {
   const { updateLogin } = useLoginState();
 
-  const handleLogin = (e: React.SyntheticEvent): void => {
+  const handleLogin = (e: React.SyntheticEvent) => {
     e.preventDefault();
     const target = e.target as typeof e.target & {
       email: { value: string };
@@ -21,7 +21,7 @@ function Login() {
     // const email = (e.target.querySelector('#email') as HTMLInputElement).value;
     // const password = (e.target.querySelector('#password') as HTMLInputElement)
     //   .value;
-    console.log('email', email, 'password', password);
+
     const info = { email, password };
 
     fetch('/api/auth/login', {
