@@ -29,7 +29,7 @@ import Placeholder from '../images/testImg/img0.jpg';
 import logo from '../images/logo.png';
 import BG from '../images/BG2.svg';
 
-const useLoginState = require('../hooks/useLoginHooke');
+const useLoginState = require('../hooks/useLoginHook');
 import { useNavigate } from 'react-router';
 
 // Define interface for card data (distinct from card display )
