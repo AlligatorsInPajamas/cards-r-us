@@ -1,7 +1,7 @@
 const GitSession = require('../models/sessionsModel.js');
 const User = require('../models/UserModel.js');
 const GoogleUsers = require('../models/googleUserModel');
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import session from 'express-session';
 const Session = require('../models/sessionsModel');
 
@@ -11,11 +11,7 @@ const sessionController = {};
  * isLoggedIn - find the appropriate session for this request in the database, then
  * verify whether or not the session is still valid.
  */
-sessionController.isLoggedIn = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+sessionController.isLoggedIn = (req, res, next) => {
   console.log('req.cookiessss', req.cookies);
 
   console.log('yay');
@@ -32,10 +28,29 @@ sessionController.isLoggedIn = (
       message: { err: 'No SSID session found.' },
     });
   }
+
+  if (!SSID) {
+    console.log('google route!');
+    let user = req.session.passport.user;
+    GoogleUsers.findOne({ _id: user }, (err, user) => {
+      console.log('Google user find one');
+      if (err)
+        return next({
+          log: `sessionController.isLoggedIn: ${err}`,
+          status: 500,
+          message: { err: 'An error occurred' },
+        });
+      console.log('after if');
+      console.log('user', user);
+      res.locals.user = user;
+      console.log('res', res.locals.user);
+      return next();
+    });
+  }
   //github
-  if (!token) {
+  if (SSID) {
+    console.log('made it to findOne for git');
     GitSession.findOne({ _id: SSID }, async (err, records) => {
-      console.log('made it to findOne');
       console.log('records', records);
       if (err)
         return next({
@@ -67,24 +82,7 @@ sessionController.isLoggedIn = (
       });
     });
   }
-  //github
-  if (!SSID) {
-    let user = req.session.passport.user;
-    GoogleUsers.findOne({ _id: user }, (err, user) => {
-      console.log('user find one');
-      if (err)
-        return next({
-          log: `sessionController.isLoggedIn: ${err}`,
-          status: 500,
-          message: { err: 'An error occurred' },
-        });
-      console.log('after if');
-      console.log('user', user);
-      res.locals.user = user;
-      console.log('res', res.locals.user);
-      return next();
-    });
-  }
+  //google
 };
 
 /**
