@@ -1,8 +1,15 @@
 import { useState, useEffect } from 'react';
 
+interface User {
+  username: string | null;
+  email?: string | null;
+  avatar?: string | null;
+  name?: string | null;
+  userId: string | null;
+}
 interface LoginInfo {
   isLoggedIn: boolean;
-  user: null | object;
+  user: User | null;
 }
 
 export default function useLoginState() {
@@ -21,7 +28,7 @@ export default function useLoginState() {
    * userId: string | null,
    * }} user
    */
-  const updateLogin = (fetchedData: { userId: string; id: string }) => {
+  const updateLogin = (fetchedData: User) => {
     const defaultUser = {
       username: null,
       email: null,
@@ -32,7 +39,7 @@ export default function useLoginState() {
 
     setLoginInformation({
       isLoggedIn: fetchedData?.userId !== null,
-      user: { ...defaultUser, fetchedData, userId: fetchedData.id },
+      user: { ...defaultUser, ...fetchedData },
     });
   };
 
