@@ -18,10 +18,6 @@ function Login() {
     const email = target.email.value;
     const password = target.password.value;
 
-    // const email = (e.target.querySelector('#email') as HTMLInputElement).value;
-    // const password = (e.target.querySelector('#password') as HTMLInputElement)
-    //   .value;
-
     const info = { email, password };
 
     fetch('/api/auth/login', {
