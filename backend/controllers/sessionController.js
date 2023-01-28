@@ -5,17 +5,13 @@ import { NextFunction, Request, Response, Router } from 'express';
 import session from 'express-session';
 const Session = require('../models/sessionsModel');
 
-const sessionController: any = {};
+const sessionController = {};
 
 /**
  * isLoggedIn - find the appropriate session for this request in the database, then
  * verify whether or not the session is still valid.
  */
-sessionController.isLoggedIn = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+sessionController.isLoggedIn = (req, res, next) => {
   console.log('req.cookiessss', req.cookies);
 
   console.log('yay');
@@ -36,7 +32,7 @@ sessionController.isLoggedIn = (
   if (!SSID) {
     console.log('google route!');
     let user = req.session.passport.user;
-    GoogleUsers.findOne({ _id: user }, (err: Error, user: any) => {
+    GoogleUsers.findOne({ _id: user }, (err, user) => {
       console.log('Google user find one');
       if (err)
         return next({
@@ -54,7 +50,7 @@ sessionController.isLoggedIn = (
   //github
   if (SSID) {
     console.log('made it to findOne for git');
-    GitSession.findOne({ _id: SSID }, async (err: Error, records: any) => {
+    GitSession.findOne({ _id: SSID }, async (err, records) => {
       console.log('Github user find one');
       console.log('records', records);
       if (err)
@@ -71,7 +67,7 @@ sessionController.isLoggedIn = (
           message: { err: 'No session found.' },
         });
 
-      User.findOne({ _id: records.userId }, (err: Error, user: any) => {
+      User.findOne({ _id: records.userId }, (err, user) => {
         console.log('user find one');
         if (err)
           return next({
@@ -92,41 +88,34 @@ sessionController.isLoggedIn = (
 /**
  * startSession - create and save a new Session into the database.
  */
-sessionController.startSession = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+sessionController.startSession = (req, res, next) => {
   console.log('startSession??');
   const { SSID } = req.cookies;
   console.log('SSID', SSID);
   // If there is already an SSID cookie, go ahead an authenticate it.
   // if (SSID) return sessionController.isLoggedIn(req, res, next);
 
-  Session.create(
-    { userId: res.locals.user.id },
-    (err: Error, newSession: any) => {
-      if (err)
-        return next({
-          log: `sessionController.startSession: ${err}`,
-          status: 500,
-          message: { err: 'An error occurred' },
-        });
-
-      if (newSession === null)
-        return next({
-          log: `sessionController.isLoggedIn: New session is null`,
-          status: 500,
-          message: { err: 'An error occured.' },
-        });
-
-      res.cookie('SSID', newSession._id, {
-        maxAge: 1800000, // 30 mins
-        httpOnly: true,
+  Session.create({ userId: res.locals.user.id }, (err, newSession) => {
+    if (err)
+      return next({
+        log: `sessionController.startSession: ${err}`,
+        status: 500,
+        message: { err: 'An error occurred' },
       });
-      return next();
-    }
-  );
+
+    if (newSession === null)
+      return next({
+        log: `sessionController.isLoggedIn: New session is null`,
+        status: 500,
+        message: { err: 'An error occured.' },
+      });
+
+    res.cookie('SSID', newSession._id, {
+      maxAge: 1800000, // 30 mins
+      httpOnly: true,
+    });
+    return next();
+  });
 };
 
 module.exports = sessionController;
