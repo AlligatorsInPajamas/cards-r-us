@@ -6,10 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "type": "tsc --watch --preserveWatchOutput & webpack serve",
-    "server": "npx nodemon ./backend/server.js",
+    "server": "nodemon ./dist/backend/server.js",
     "web": "webpack serve",
-    "start": "concurrently \"npm run type\" \"npm run server\""
+    "type": "tsc --watch --preserveWatchOutput",
+    "start": "concurrently \"npm run server\" \"npm run web\""
   },
   "repository": {
     "type": "git",
