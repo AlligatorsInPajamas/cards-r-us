@@ -78,7 +78,7 @@ const GalleryPage = () => {
         })
         .then((d) => {
           // Create a copy of the cards.
-          tmpCards = [...d];
+          tmpCards = [{}, ...d];
           // Set the card state
           setCards(tmpCards);
         })

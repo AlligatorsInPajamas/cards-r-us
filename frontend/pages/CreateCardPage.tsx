@@ -80,13 +80,6 @@ const CreateImg = ({
       });
   };
 
-  //--DUMMY DB Test--
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setImgList(testData.data);
-  //   }, 600);
-  // });
-
   const ImgResult = imgList.map((el: Image, i: number) => (
     <div
       className='images

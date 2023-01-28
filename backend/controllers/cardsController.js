@@ -31,6 +31,7 @@ const cardsController = {
 
   getCard: (req, res, next) => {
     const { cardId } = req.params;
+    console.log('cardId', cardId);
 
     if (!cardId)
       return next({
@@ -63,17 +64,18 @@ const cardsController = {
         author: true,
         imageUrl: image,
       };
+      console.log('res.locals.card', res.locals.card);
       return next();
     });
   },
 
   async createCard(req, res, next) {
     const { imageUrl, message, messageColor } = req.body;
-    console.log(req.body);
-    let Guser = req.session.passport.user;
+    console.log('createCard', req.body);
     const { SSID } = req.cookies;
+    console.log('createCard SSID', SSID);
     //if google
-    if (!req.cookies.SSID) {
+    if (!SSID) {
       try {
         console.log('google cards');
         if ((!imageUrl || !message, !messageColor))
@@ -84,11 +86,15 @@ const cardsController = {
           message,
           messageColor,
         });
+        console.log('newCard', newCard);
         const { _id } = newCard;
-        let Guser = res.locals.user.gallery.push(_id);
+        //console.log('Cards gallery', res.locals.user.gallery);
+        console.log('Cards user', res.locals.user);
+        res.locals.user.gallery.push(_id);
+
         await GoogleUsers.findOneAndUpdate(
-          { _id: Guser },
-          { gallery: res.locals.Guser.gallery }
+          { _id: res.locals.user._id },
+          { gallery: res.locals.user.gallery }
         );
         return next();
       } catch (e) {
@@ -100,7 +106,7 @@ const cardsController = {
       }
     }
     //if github
-    if (!req.session.passport.user) {
+    if (SSID) {
       try {
         if ((!imageUrl || !message, !messageColor))
           return new Error('No image url or message provided');
