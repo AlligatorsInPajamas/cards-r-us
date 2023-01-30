@@ -66,7 +66,7 @@ function Login() {
           Forget password?
         </Link>
         <div className='Icons'>
-          <a className='icon' href='#'>
+          <a className='icon' href='http://localhost:8080/api/google/login'>
             <i className='fa-brands fa-google'></i>
           </a>
           <a className='icon' href='http://localhost:8080/api/oauth/gh'>

@@ -8,6 +8,7 @@ const openai = new OpenAIApi(configuration);
 
 const openaiController = {
   async createImage(req, res, next) {
+    console.log('made to openaiController');
     const { userPrompt } = req.body;
     try {
       const response = await openai.createImage({
@@ -23,9 +24,9 @@ const openaiController = {
         console.log(error.response.data);
       } else {
         return next({
-          log: 'Express Error hanler caught middleware error at \'/backend/controller/openaiController',
-          message: {err: error.message}
-        })
+          log: "Express Error handler caught middleware error at '/backend/controller/openaiController",
+          message: { err: error.message },
+        });
       }
     }
     console.log('complete');
