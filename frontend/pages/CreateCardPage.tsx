@@ -11,7 +11,7 @@ import loading from '../images/loading.gif';
 
 //import bg svg
 import BG from '../images/bg.svg';
-import useLoginState from '../hooks/useLoginHooke';
+import useLoginState from '../hooks/useLoginHook';
 
 // Declare Interfaces Here
 // Will need one for imgList
@@ -79,13 +79,6 @@ const CreateImg = ({
         setSearching(false);
       });
   };
-
-  //--DUMMY DB Test--
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setImgList(testData.data);
-  //   }, 600);
-  // });
 
   const ImgResult = imgList.map((el: Image, i: number) => (
     <div

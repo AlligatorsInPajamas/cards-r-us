@@ -29,7 +29,7 @@ import Placeholder from '../images/testImg/img0.jpg';
 import logo from '../images/logo.png';
 import BG from '../images/BG2.svg';
 
-const useLoginState = require('../hooks/useLoginHooke');
+const useLoginState = require('../hooks/useLoginHook');
 import { useNavigate } from 'react-router';
 
 // Define interface for card data (distinct from card display )
@@ -43,6 +43,7 @@ interface CardData {
 export interface UserData {
   avatar: any;
   username: string;
+  firstName: string;
 }
 
 let filterCardsByAuthor = false;
@@ -72,16 +73,20 @@ const GalleryPage = () => {
           if (d.status !== 200) {
             setError(true);
           }
+          console.log('hit no cards on gallery page');
           return d.json();
         })
         .then((d) => {
           // Create a copy of the cards.
-          tmpCards = [...d];
-          // Set the card state
-          setCards(tmpCards);
+          if (d.length > 0) {
+            tmpCards = [...d];
+            // Set the card state
+            setCards(tmpCards);
+          }
         })
         .catch((e) => {
           setError(true);
+          console.log('Error occured with cards');
           console.log('Error occured: ', e);
         });
     }
@@ -93,6 +98,7 @@ const GalleryPage = () => {
             console.log(`Res status was not 200`);
             setError(true);
           }
+          console.log('hit no user on gallery page');
           return d.json();
         })
         .then((d) => {
@@ -101,6 +107,7 @@ const GalleryPage = () => {
         })
         .catch((e) => {
           setError(true);
+          console.log('hit no user on gallery page');
           console.log('Error occured: ', e);
         });
     }
