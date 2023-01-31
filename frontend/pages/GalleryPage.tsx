@@ -78,9 +78,11 @@ const GalleryPage = () => {
         })
         .then((d) => {
           // Create a copy of the cards.
-          tmpCards = [...d];
-          // Set the card state
-          setCards(tmpCards);
+          if (d.length > 0) {
+            tmpCards = [...d];
+            // Set the card state
+            setCards(tmpCards);
+          }
         })
         .catch((e) => {
           setError(true);

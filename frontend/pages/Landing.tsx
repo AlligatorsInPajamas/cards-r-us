@@ -1,19 +1,17 @@
 import React from 'react';
 
-import Sponsers from '../components/landing/Sponsers';
+import Sponsors from '../components/landing/Sponsors';
 import Head from '../components/landing/Head';
 import Body from '../components/landing/body';
 
-
 import Background from '../images/bg.svg';
-
 
 const Landing = () => (
   <div className='LandingPage'>
-    <Background className='background'/>
+    <Background className='background' />
     <Head />
     <Body />
-    <Sponsers />
+    <Sponsors />
   </div>
 );
 
