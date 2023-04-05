@@ -5,26 +5,29 @@ import Background from '../images/bg.svg';
 import Logo from '../images/logo.png';
 
 const SignUp = () => {
-
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    
-    const email = e.target.querySelector('#email').value;
-    const password = e.target.querySelector('#password').value;
+    const target = e.target as typeof e.target & {
+      email: { value: string };
+      password: { value: string };
+    };
 
-    const info = { email, password};
+    const email = target.email.value;
+    const password = target.password.value;
+
+    const info = { email, password };
 
     fetch('/api/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringfy(info),
+      body: JSON.stringify(info),
     })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log('Successfully created account');
-    });
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('Successfully created account');
+      });
   };
 
   return (
@@ -47,15 +50,15 @@ const SignUp = () => {
           <input type='password' name='password' />
           <br className='noSelect' />
           <label>Confirm Password:</label>
-          <input type='password' name='password' id='password'/>
+          <input type='password' name='password' id='password' />
           <br className='noSelect' />
         </div>
 
         <div className='buttons noSelect'>
           <button className='button'>
-          <Link className='button' to='/login'>
-            Create Account
-          </Link>
+            <Link className='button' to='/login'>
+              Create Account
+            </Link>
           </button>
         </div>
         <br className='noSelect' />

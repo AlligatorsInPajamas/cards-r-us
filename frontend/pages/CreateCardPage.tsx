@@ -11,20 +11,49 @@ import loading from '../images/loading.gif';
 
 //import bg svg
 import BG from '../images/bg.svg';
-import useLoginState from '../hooks/useLoginHooke';
+import useLoginState from '../hooks/useLoginHook';
+
+// Declare Interfaces Here
+// Will need one for imgList
+interface Image {
+  url: string;
+}
+
+interface MsgData {
+  color: string;
+  message: string | undefined;
+}
+
+interface StepDisplayProps {
+  allImagesState: [allImages: Image[], setAllImages: (arg0: any) => void];
+  imageState: [
+    selectedImage: Image | undefined,
+    setSelectedImage: (arg0: Image) => void
+  ];
+  promptState: [
+    selectedMessage: MsgData | undefined,
+    setSelectedMessage: (arg0: MsgData) => void
+  ];
+  currentStep: number;
+  canContinue: boolean;
+  nextFunction: (e: React.SyntheticEvent) => void;
+  steps: number;
+}
 
 // Step 1
 const CreateImg = ({
-  allImages,
+  allImagesState,
   imageState,
   canContinue,
   currentStep,
   nextFunction,
   steps,
-}) => {
+}: StepDisplayProps) => {
   const [selectedImage, setSelectedImage] = imageState;
   const [userPrompt, setUserPrompt] = useState('');
-  const [imgList, setImgList] = allImages;
+  // allImages is the state variable. In this case, setImgList will just be the second element of the allImagesState array through array destructuring
+  const [imgList, setImgList] = allImagesState;
+
   const [searching, setSearching] = useState(false);
   //--DALL-E API fetch request--
 
@@ -33,7 +62,7 @@ const CreateImg = ({
   //   const
   // }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     setSearching(true);
     const prompt = { userPrompt };
@@ -45,28 +74,22 @@ const CreateImg = ({
       body: JSON.stringify(prompt),
     })
       .then((res) => res.json())
-      .then((data) => {
+      .then((data: any) => {
         setImgList(data.data);
         setSearching(false);
       });
   };
 
-  //--DUMMY DB Test--
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setImgList(testData.data);
-  //   }, 600);
-  // });
-
-  const ImgResult = imgList.map((el, i) => (
+  const ImgResult = imgList.map((el: Image, i: number) => (
     <div
       className='images
     noSelect'
       key={i}>
       <img
         className='noDrag image'
-        onClick={(e) => {
-          setSelectedImage(e.target.src);
+        onClick={(e: React.SyntheticEvent) => {
+          let target = e.target as HTMLInputElement;
+          setSelectedImage({ url: target.src });
         }}
         src={el.url}
       />
@@ -118,27 +141,28 @@ const CreateImg = ({
 
 // Step 2  create prompt and confirm card
 const CreatePrompt = ({
-  allImages,
+  allImagesState,
   promptState,
   imageState,
   canContinue,
   currentStep,
   nextFunction,
   steps,
-}) => {
-  const [imgList, setImgList] = allImages;
+}: StepDisplayProps) => {
+  const [imgList, setImgList] = allImagesState;
   const [selectedImage, setSelectedImage] = imageState;
   const [selectedMessage, setSelectedMessage] = promptState;
   const [textColor, setTextColor] = useState('#eef0f2');
 
   const image = imageState[0];
 
-  const ImgResult = imgList.map((el, i) => (
+  const ImgResult = imgList.map((el: Image, i: number) => (
     <div className='image' key={i}>
       <img
         className='noDrag'
-        onClick={(e) => {
-          setSelectedImage(e.target.src);
+        onClick={(e: React.SyntheticEvent) => {
+          let target = e.target as HTMLInputElement;
+          setSelectedImage({ url: target.src });
         }}
         src={el.url}
       />
@@ -175,7 +199,7 @@ const CreatePrompt = ({
         <div
           className='Preview'
           style={{
-            backgroundImage: `url(${image ?? Placeholder})`,
+            backgroundImage: `url(${image?.url ?? Placeholder})`,
             borderRadius: '1em',
           }}>
           <h2
@@ -202,7 +226,7 @@ const CreatePrompt = ({
 
 // The main page component that will handle state for prompt and image generation and it will control whether the user can continue to the next step
 const CreateCard = () => {
-  const steps = [<CreateImg />, <CreatePrompt />];
+  const steps = [CreateImg, CreatePrompt];
 
   const [createCardState, setCreateCardState] = useState({
     stepDisplayed: steps[0],
@@ -210,9 +234,13 @@ const CreateCard = () => {
     canContinue: false,
   });
 
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedMessage, setSelectedMessage] = useState(null);
-  const [allImages, setAllImages] = useState([]);
+  const [selectedImage, setSelectedImage] = useState<Image | undefined>(
+    undefined
+  );
+  const [selectedMessage, setSelectedMessage] = useState<MsgData | undefined>(
+    undefined
+  );
+  const [allImages, setAllImages] = useState<Image[]>([]);
   const [error, setError] = useState(false);
   const { isLoggedIn } = useLoginState();
 
@@ -226,9 +254,9 @@ const CreateCard = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          imageUrl: selectedImage,
-          message: selectedMessage.message,
-          messageColor: selectedMessage.color,
+          imageUrl: selectedImage?.url,
+          message: selectedMessage?.message ?? 'placeholder',
+          messageColor: selectedMessage?.color ?? 'placeholder',
         }),
       })
         .then((d) => {
@@ -246,6 +274,7 @@ const CreateCard = () => {
       // setTimeout(() => (window.location.href = '/cards'), 600);
     }
 
+    // Set card state by moving through steps (with conditionals)
     setCreateCardState({
       ...createCardState,
       stepDisplayed:
@@ -266,16 +295,17 @@ const CreateCard = () => {
     <div className='CreateCard'>
       <BG className='background' />
       {/* Displays the current step */}
+
       <div className='StepDisplay'>
-        {React.cloneElement(createCardState.stepDisplayed, {
-          allImages: [allImages, setAllImages],
-          imageState: [selectedImage, setSelectedImage],
-          promptState: [selectedMessage, setSelectedMessage],
-          currentStep: createCardState.currentStep,
-          canContinue: createCardState.canContinue,
-          nextFunction: handleNext,
-          steps: steps.length,
-        })}
+        <createCardState.stepDisplayed
+          allImagesState={[allImages, setAllImages]}
+          imageState={[selectedImage, setSelectedImage]}
+          promptState={[selectedMessage, setSelectedMessage]}
+          currentStep={createCardState.currentStep}
+          canContinue={createCardState.canContinue}
+          nextFunction={handleNext}
+          steps={steps.length}
+        />
       </div>
     </div>
   );

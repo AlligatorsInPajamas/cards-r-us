@@ -23,10 +23,15 @@ router.post(
     res.status(200).json(res.locals.user);
   }
 );
+//old code
+// router.get('/user', sessionController.isLoggedIn, (req, res) => {
+//   const { email, username, avatar, name, _id } = res.locals.user;
+//   res.status(200).json({ email, username, avatar, name, userId: _id });
+// });
 
 router.get('/user', sessionController.isLoggedIn, (req, res) => {
-  const { email, username, avatar, name, _id } = res.locals.user;
-  res.status(200).json({ email, username, avatar, name, userId: _id });
+  const { username, avatar, _id } = res.locals.user;
+  res.status(200).json({ username, avatar, userId: _id });
 });
 
 module.exports = router;

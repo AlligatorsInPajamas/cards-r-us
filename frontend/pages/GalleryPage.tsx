@@ -18,9 +18,10 @@ import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import Menu from '@mui/icons-material/Menu';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import Logout from '@mui/icons-material/Logout';
+import AddIcon from '@mui/icons-material/Add';
 
 // Hook imports
-import useIsMobile from '../hooks/isMobileHook';
+// import useIsMobile from '../hooks/isMobileHook';
 
 // TODO: add preview image based on S3 url instead of img0
 import Placeholder from '../images/testImg/img0.jpg';
@@ -28,21 +29,36 @@ import Placeholder from '../images/testImg/img0.jpg';
 import logo from '../images/logo.png';
 import BG from '../images/BG2.svg';
 
-import useLoginState from '../hooks/useLoginHooke';
+const useLoginState = require('../hooks/useLoginHook');
+import { useNavigate } from 'react-router';
+
+// Define interface for card data (distinct from card display )
+interface CardData {
+  cardId: number;
+  author: string;
+  message: string;
+  imageUrl: string;
+}
+
+export interface UserData {
+  avatar: any;
+  username: string;
+  firstName: string;
+}
 
 let filterCardsByAuthor = false;
 // This will be used to hold the un-filtered cards
-let tmpCards = [];
-
-let isError = false;
+let tmpCards: CardData[] = [];
 
 const GalleryPage = () => {
   const [displaySideBar, setDisplaySideBar] = useState(true);
   // const [filterCardsByAuthor, setFilterCardsByAuthor] = useState(false);
-  const [cards, setCards] = useState(null);
-  const isMobile = useIsMobile();
+  const [cards, setCards] = useState(tmpCards);
+
+  // const isMobile = useIsMobile();
+  const isMobile: boolean = false;
   const [error, setError] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<UserData | undefined>(undefined);
   // const { isLoggedIn, user } = useLoginState();
 
   // if (!isLoggedIn) window.location.href = '/login';
@@ -51,22 +67,26 @@ const GalleryPage = () => {
   useEffect(() => {
     // TODO: Replace this with a fetch to backend
     // TODO: fix bug where "fetch" occurs on every filter
-    if (!cards) {
+    if (!cards[0]) {
       fetch('/api/cards/', { method: 'GET' })
         .then((d) => {
           if (d.status !== 200) {
             setError(true);
           }
+          console.log('hit no cards on gallery page');
           return d.json();
         })
         .then((d) => {
           // Create a copy of the cards.
-          tmpCards = [...d];
-          // Set the card state
-          setCards(d);
+          if (d.length > 0) {
+            tmpCards = [...d];
+            // Set the card state
+            setCards(tmpCards);
+          }
         })
         .catch((e) => {
           setError(true);
+          console.log('Error occured with cards');
           console.log('Error occured: ', e);
         });
     }
@@ -75,8 +95,10 @@ const GalleryPage = () => {
       fetch('/api/auth/user', { method: 'GET' })
         .then((d) => {
           if (d.status !== 200) {
+            console.log(`Res status was not 200`);
             setError(true);
           }
+          console.log('hit no user on gallery page');
           return d.json();
         })
         .then((d) => {
@@ -85,16 +107,18 @@ const GalleryPage = () => {
         })
         .catch((e) => {
           setError(true);
+          console.log('hit no user on gallery page');
           console.log('Error occured: ', e);
         });
     }
   });
 
   // This will be used to delete cards
-  const handleCardDelete = (e, id) => {
+  const handleCardDelete = (e: any, id: number) => {
     e.preventDefault();
     console.log('delete ', id);
-    const filtered = cards.filter((card) => card.cardId !== id);
+
+    const filtered = cards.filter((card: CardData) => card.cardId !== id);
     tmpCards = filtered;
     // TODO: have delete card in database as well
     fetch('/api/cards', {
@@ -108,15 +132,23 @@ const GalleryPage = () => {
   };
 
   // This will handle card filtering
-  const doCardFilter = (e) => {
+  const doCardFilter = (e: any) => {
     e.preventDefault();
     filterCardsByAuthor = !filterCardsByAuthor;
     // if (!tmpCards) tmpCards = [...cards];
     if (filterCardsByAuthor) {
-      setCards(cards.filter((card) => card.author));
+      setCards(cards.filter((card: CardData) => card.author));
     } else {
       setCards(tmpCards);
     }
+  };
+
+  // This will handle redirect for creating cards
+  const navigate = useNavigate();
+
+  const navCreateCard = (e: any) => {
+    e.preventDefault();
+    navigate('/create');
   };
 
   // TODO: Refactor the jank responsiveness
@@ -166,6 +198,20 @@ const GalleryPage = () => {
                 ) : (
                   <IconButton onClick={doCardFilter}>
                     <FilterList />
+                  </IconButton>
+                )}
+              </li>
+              <li>
+                {displaySideBar ? (
+                  <Button
+                    onClick={navCreateCard}
+                    startDecorator={<AddIcon />}
+                    variant='soft'>
+                    Create New
+                  </Button>
+                ) : (
+                  <IconButton onClick={navCreateCard}>
+                    <AddIcon />
                   </IconButton>
                 )}
               </li>
@@ -221,8 +267,8 @@ const GalleryPage = () => {
               <li>
                 {!displaySideBar ? (
                   <Button
-                    onClick={() => {
-                      doCardFilter(e, !filterCardsByAuthor);
+                    onClick={(e) => {
+                      doCardFilter(e);
                       setTimeout(() => setDisplaySideBar(!displaySideBar), 200);
                     }}
                     startDecorator={<FilterList />}
@@ -252,7 +298,7 @@ const GalleryPage = () => {
                 key={i}
                 cardId={card.cardId}
                 image={card.imageUrl}
-                message={card.message}
+                prompt={card.message}
                 deleteFunction={handleCardDelete}
               />
             ))
