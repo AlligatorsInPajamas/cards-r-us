@@ -59,7 +59,7 @@ module.exports = {
     },
     historyApiFallback: true,
     proxy: {
-      '/api': 'http://localhost:3000',
+      '/api': 'http://localhost:9003', // Port for middle-aware proxy
     },
   },
 

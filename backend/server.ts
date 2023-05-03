@@ -12,7 +12,7 @@ import passport from 'passport';
 const MongoStore = require('connect-mongo')(session);
 const cookieSession = require('cookie-session');
 
-const PORT = 3000;
+const PORT = 5002; // "Target port" for middle-aware proxy
 
 // api router
 const apiRouter = require('./routes/api');
