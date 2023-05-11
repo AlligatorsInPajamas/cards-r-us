@@ -5,13 +5,12 @@ import { NextFunction, Request, Response, Router } from 'express';
 import session from 'express-session';
 const Session = require('../models/sessionsModel');
 
-const sessionController = {};
-
 /**
  * isLoggedIn - find the appropriate session for this request in the database, then
  * verify whether or not the session is still valid.
  */
-sessionController.isLoggedIn = (req, res, next) => {
+const sessionController = {
+isLoggedIn (req, res, next) {
   console.log('req.cookiessss', req.cookies);
 
   console.log('yay');
@@ -83,12 +82,12 @@ sessionController.isLoggedIn = (req, res, next) => {
       });
     });
   }
-};
+},
 
 /**
  * startSession - create and save a new Session into the database.
  */
-sessionController.startSession = (req, res, next) => {
+startSession (req, res, next) {
   console.log('startSession??');
   const { SSID } = req.cookies;
   console.log('SSID', SSID);
@@ -116,6 +115,7 @@ sessionController.startSession = (req, res, next) => {
     });
     return next();
   });
-};
+}
+}
 
 module.exports = sessionController;
